@@ -1,0 +1,7 @@
+.idea/
+__pycache__/
+new_plots/
+models/
+imgs/
+test_run.py
+nyu_depth_v2_labeled.mat
