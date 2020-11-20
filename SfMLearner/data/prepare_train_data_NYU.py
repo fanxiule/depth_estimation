@@ -1,6 +1,5 @@
 from __future__ import division
 import argparse
-import scipy.misc
 import numpy as np
 import matplotlib.pyplot as plt
 from glob import glob
@@ -8,10 +7,11 @@ from joblib import Parallel, delayed
 import os
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--dataset_dir", type=str, default="/home/xiule/Downloads/ppm/", help="where the dataset is stored")
+parser.add_argument("--dataset_dir", type=str, default="/home/fan/Downloads/basements/",
+                    help="where the dataset is stored")
 parser.add_argument("--dataset_name", type=str, default="NYU_depth", help="which dataset needs to be prepared")
 parser.add_argument("--dump_root", type=str,
-                    default="/home/xiule/Programming/p_workspace/depth_esitmation_lit_reviews/depth_estimation/SfMLearner/data/NYU/formatted_data/",
+                    default="/home/fan/Programming/p_workspace/depth_estimation/SfMLearner/data/NYU/formatted_data/",
                     help="Where to dump the data")
 parser.add_argument("--seq_length", type=int, default=3, help="Length of each training sequence")
 parser.add_argument("--img_height", type=int, default=480, help="image height")
@@ -30,33 +30,36 @@ def concat_image_seq(seq):
 
 
 def dump_example(n, args):
-    # if n % 2000 == 0:
-    print('Progress %d/%d....' % (n, data_loader.num_train - 2))
-    example = data_loader.get_train_example_with_idx(n)
-    if example == False:
-        return
-    image_seq = concat_image_seq(example['image_seq'])
-    intrinsics = example['intrinsics']
-    fx = intrinsics[0, 0]
-    fy = intrinsics[1, 1]
-    cx = intrinsics[0, 2]
-    cy = intrinsics[1, 2]
-    folder_name = example['file_name'].split('/')[0]
-    dump_dir = args.dump_root + folder_name
-    # if not os.path.isdir(dump_dir):
-    #     os.makedirs(dump_dir, exist_ok=True)
     try:
-        os.makedirs(dump_dir)
-    except OSError:
-        if not os.path.isdir(dump_dir):
-            raise
-    file_name = example['file_name'].split('/')[1]
-    file_name = file_name.split('.ppm')[0]
-    dump_img_file = dump_dir + '/%s.jpg' % file_name
-    plt.imsave(dump_img_file, image_seq)
-    dump_cam_file = dump_dir + '/%s_cam.txt' % file_name
-    with open(dump_cam_file, 'w') as f:
-        f.write('%f,0.,%f,0.,%f,%f,0.,0.,1.' % (fx, cx, fy, cy))
+        if n % 200 == 0:
+            print('Progress %d/%d....' % (n, data_loader.num_train - 2))
+        example = data_loader.get_train_example_with_idx(n)
+        if example == False:
+            return
+        image_seq = concat_image_seq(example['image_seq'])
+        intrinsics = example['intrinsics']
+        fx = intrinsics[0, 0]
+        fy = intrinsics[1, 1]
+        cx = intrinsics[0, 2]
+        cy = intrinsics[1, 2]
+        folder_name = example['file_name'].split('/')[0]
+        dump_dir = args.dump_root + folder_name
+        # if not os.path.isdir(dump_dir):
+        #     os.makedirs(dump_dir, exist_ok=True)
+        try:
+            os.makedirs(dump_dir)
+        except OSError:
+            if not os.path.isdir(dump_dir):
+                raise
+        file_name = example['file_name'].split('/')[1]
+        file_name = file_name.split('.ppm')[0]
+        dump_img_file = dump_dir + '/%s.jpg' % file_name
+        plt.imsave(dump_img_file, image_seq)
+        dump_cam_file = dump_dir + '/%s_cam.txt' % file_name
+        with open(dump_cam_file, 'w') as f:
+            f.write('%f,0.,%f,0.,%f,%f,0.,0.,1.' % (fx, cx, fy, cy))
+    except IndexError:
+        pass
 
 
 def main():
@@ -70,8 +73,10 @@ def main():
                              img_width=args.img_width,
                              seq_length=args.seq_length)
 
-    for n in range(1, data_loader.num_train - 1):
-        dump_example(n, args)
+    Parallel(n_jobs=args.num_threads)(delayed(dump_example)(n, args) for n in range(data_loader.num_train))  ##
+
+    # for n in range(1, data_loader.num_train - 1):
+    #    dump_example(n, args)
 
     # Split into train/val
     np.random.seed(8964)  ##

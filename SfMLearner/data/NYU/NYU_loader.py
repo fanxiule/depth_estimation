@@ -30,9 +30,17 @@ class NYU_loader(object):
             img_files = glob(img_dir + scene + '/*.ppm')
             img_files.sort()
             for f in img_files:
-                frame_id = os.path.basename(f)
-                frame_id = scene + '/' + frame_id
-                frames.append(frame_id)
+                try:
+                    # perform these two lines of code to identify truncated image
+                    img = Image.open(f)
+                    _ = img.resize((self.img_width, self.img_height))
+
+                    frame_id = os.path.basename(f)
+                    frame_id = scene + '/' + frame_id
+                    frames.append(frame_id)
+                except OSError:
+                    os.remove(f)
+                    pass
         return frames
 
     def load_image_sequence(self, tg_idx, seq_length):
