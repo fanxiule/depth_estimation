@@ -13,6 +13,7 @@ class NYU_loader(object):
         self.img_width = img_width
         self.seq_length = seq_length
         assert seq_length % 2 != 0, 'seq_length must be odd'
+        print('Start collecting frames') ####
         self.frames = self.collect_frames()
         self.num_frames = len(self.frames)
         if split == 'train':
@@ -23,10 +24,13 @@ class NYU_loader(object):
 
     def collect_frames(self):
         img_dir = self.dataset_dir
+        print(img_dir) ####
         scene_list = os.listdir(img_dir)
         scene_list.sort()
+        print(scene_list) ####
         frames = []
         for scene in scene_list:
+            print(scene) ####
             img_files = glob(img_dir + scene + '/*.ppm')
             img_files.sort()
             for f in img_files:

@@ -4,4 +4,6 @@ data/NYU/formatted_data
 models/model-190532.data-00000-of-00001
 models/model-190532.index
 models/model-190532.meta
-checkpoints
+data/test*
+__pycache__
+jobs/

@@ -3,13 +3,13 @@ import tensorflow as tf
 import pprint
 import random
 import numpy as np
-from SfMLearner import SfMLearner
+from SfMLearner_NYU import SfMLearner
 import os
 
 flags = tf.app.flags
-flags.DEFINE_string("dataset_dir", "/home/fan/Programming/p_workspace/depth_estimation/SfMLearner/data/NYU/formatted_data", "Dataset directory")
-flags.DEFINE_string("checkpoint_dir", "./checkpoints/NYU", "Directory name to save the checkpoints")
-flags.DEFINE_string("init_checkpoint_file", '/home/fan/Programming/p_workspace/depth_estimation/SfMLearner/models/model-190532', "Specific checkpoint file to initialize from")
+flags.DEFINE_string("dataset_dir", "/home/xfan/projects/def-fidan/NYU_formatted_Data", "Dataset directory")
+flags.DEFINE_string("checkpoint_dir", "./checkpoints/NYU", "Directory name to save the checkpoints")   
+flags.DEFINE_string("init_checkpoint_file", '/home/xfan/workspace/depth_estimation/SfMLearner/models/model-190532', "Specific checkpoint file to initialize from")
 flags.DEFINE_float("learning_rate", 0.0002, "Learning rate of for adam")
 flags.DEFINE_float("beta1", 0.9, "Momentum term of adam")
 flags.DEFINE_float("smooth_weight", 0.5, "Weight for smoothness")
@@ -18,9 +18,9 @@ flags.DEFINE_integer("batch_size", 4, "The size of of a sample batch")
 flags.DEFINE_integer("img_height", 480, "Image height")
 flags.DEFINE_integer("img_width", 640, "Image width")
 flags.DEFINE_integer("seq_length", 3, "Sequence length for each example")
-flags.DEFINE_integer("max_steps", 200000, "Maximum number of training iterations")
+flags.DEFINE_integer("max_steps", 70000, "Maximum number of training iterations")
 flags.DEFINE_integer("summary_freq", 100, "Logging every log_freq iterations")
-flags.DEFINE_integer("save_latest_freq", 5000, \
+flags.DEFINE_integer("save_latest_freq", 3500, \
                      "Save the latest model every save_latest_freq iterations (overwrites the previous latest model)")
 flags.DEFINE_integer("num_source", 2, "Number of source images")
 flags.DEFINE_integer("num_scales", 4, "Number of scaling points")

@@ -7,11 +7,11 @@ from joblib import Parallel, delayed
 import os
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--dataset_dir", type=str, default="/home/fan/Downloads/basements/",
+parser.add_argument("--dataset_dir", type=str, default="/home/xfan/projects/def-fidan/Data/",
                     help="where the dataset is stored")
 parser.add_argument("--dataset_name", type=str, default="NYU_depth", help="which dataset needs to be prepared")
 parser.add_argument("--dump_root", type=str,
-                    default="/home/fan/Programming/p_workspace/depth_estimation/SfMLearner/data/NYU/formatted_data/",
+                    default="/home/xfan/projects/def-fidan/NYU_formatted_Data/",
                     help="Where to dump the data")
 parser.add_argument("--seq_length", type=int, default=3, help="Length of each training sequence")
 parser.add_argument("--img_height", type=int, default=480, help="image height")
@@ -65,6 +65,8 @@ def dump_example(n, args):
 def main():
     if not os.path.exists(args.dump_root):
         os.makedirs(args.dump_root)
+    
+    print('starting data loader') ####
 
     global data_loader
     from NYU.NYU_loader import NYU_loader
@@ -73,7 +75,7 @@ def main():
                              img_width=args.img_width,
                              seq_length=args.seq_length)
 
-    Parallel(n_jobs=args.num_threads)(delayed(dump_example)(n, args) for n in range(data_loader.num_train))  ##
+    Parallel(n_jobs=args.num_threads)(delayed(dump_example)(n, args) for n in range(1, data_loader.num_train - 1))  ##
 
     # for n in range(1, data_loader.num_train - 1):
     #    dump_example(n, args)
