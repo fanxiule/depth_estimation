@@ -7,3 +7,7 @@ models/model-190532.meta
 data/test*
 __pycache__
 jobs/
+checkpoints/
+.ipynb_checkpoints/
+nyu_test/test*
+nyu_test/nyu_depth_v2_labeled.mat
