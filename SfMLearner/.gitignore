@@ -7,3 +7,4 @@ models/model-190532.meta
 data/test*
 __pycache__
 jobs/
+checkpoints/
