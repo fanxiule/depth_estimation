@@ -7,9 +7,9 @@ from SfMLearner_NYU import SfMLearner
 import os
 
 flags = tf.app.flags
-flags.DEFINE_string("dataset_dir", "/home/xfan/projects/def-fidan/NYU_formatted_Data", "Dataset directory")
+flags.DEFINE_string("dataset_dir", "/home/xfan/Documents/Datasets/NYU", "Dataset directory")
 flags.DEFINE_string("checkpoint_dir", "./checkpoints/NYU", "Directory name to save the checkpoints")   
-flags.DEFINE_string("init_checkpoint_file", '/home/xfan/workspace/depth_estimation/SfMLearner/models/model-190532', "Specific checkpoint file to initialize from")
+flags.DEFINE_string("init_checkpoint_file", None, "Specific checkpoint file to initialize from")
 flags.DEFINE_float("learning_rate", 0.0002, "Learning rate of for adam")
 flags.DEFINE_float("beta1", 0.9, "Momentum term of adam")
 flags.DEFINE_float("smooth_weight", 0.5, "Weight for smoothness")
@@ -24,7 +24,7 @@ flags.DEFINE_integer("save_latest_freq", 3500, \
                      "Save the latest model every save_latest_freq iterations (overwrites the previous latest model)")
 flags.DEFINE_integer("num_source", 2, "Number of source images")
 flags.DEFINE_integer("num_scales", 4, "Number of scaling points")
-flags.DEFINE_boolean("continue_train", True, "Continue training from previous checkpoint")
+flags.DEFINE_boolean("continue_train", False, "Continue training from previous checkpoint")
 FLAGS = flags.FLAGS
 
 

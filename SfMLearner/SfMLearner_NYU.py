@@ -294,7 +294,7 @@ class SfMLearner(object):
             self.inputs = input_uint8
             self.pred_poses = pred_poses
 
-    def preprocess_image(self, image):
+    def preprocess_image(self, image): ##### why
         # Assuming input image is uint8
         image = tf.image.convert_image_dtype(image, dtype=tf.float32)
         return image * 2. -1.

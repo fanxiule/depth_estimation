@@ -11,3 +11,7 @@ checkpoints/
 .ipynb_checkpoints/
 nyu_test/test*
 nyu_test/nyu_depth_v2_labeled.mat
+test.py
+A.jpg
+B.jpg
+C.jpg
