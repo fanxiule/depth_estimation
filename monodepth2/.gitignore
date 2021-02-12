@@ -6,3 +6,5 @@ __pycache__
 kitti_data
 models
 .ipynb_checkpoints
+eval_results
+datasets/nyu_depth_v2_labeled.mat
