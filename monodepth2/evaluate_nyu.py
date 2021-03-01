@@ -27,10 +27,14 @@ parser.add_argument("--orig_flag",
 parser.add_argument("--tuned_flag",
                     help="A flag to indicate if the fine tuned model should be evaluated",
                     action="store_false")
+parser.add_argument("--tuned_model_name",
+                    type=str,
+                    help="What is the model name for the fine tuned model",
+                    default="nyu_fine_tuned_lr1e-7")
 parser.add_argument("--tuned_models",
                     type=list,
                     help="The model number/epoch to be evaluated within the available fine tuned models",
-                    default=[0, 2, 4])
+                    default=[0, 4, 14])
 parser.add_argument("--use_GPU",
                     help="A flag to indicate if GPU should be used for evaluation",
                     action="store_false")
@@ -209,7 +213,7 @@ def main():
         img_W_list['mono'] = width
 
     if options.tuned_flag:  # load the fine tuned model
-        model_folder = "nyu_fine_tuned/models"
+        model_folder = options.tuned_model_name + "/models"
         tuned_model_path = os.path.join(options.model_path, model_folder)
         for i in options.tuned_models:
             print("Loading fine tuned model from epoch %s" % str(i + 1))
@@ -239,6 +243,7 @@ def main():
         total_imgs = mono_dataset.get_total_img_num()
 
     # evaluation
+    '''
     loss_list = {}
     if options.orig_flag:
         loss_list['mono'] = LossStack()
@@ -264,9 +269,10 @@ def main():
         print("%s losses: a1=%.4f a2=%.4f a3=%.4f rmse=%.4f rmse_log=%.4f abs_rel=%.4f sq_rel=%.4f" % (
             model, avg_losses[0], avg_losses[1], avg_losses[2], avg_losses[3], avg_losses[4], avg_losses[5],
             avg_losses[6]))
-
+    '''
     # generate a sample output
-    img_ind = random.randint(0, total_imgs)
+    # img_ind = random.randint(0, total_imgs)
+    img_ind = 283
     pred_depth_list = {}
     if options.orig_flag:
         rgb_input, gt_depth = get_single_sample(mono_dataset, img_ind)
@@ -289,17 +295,17 @@ def main():
     fig, axs = plt.subplots(2, 3)
     axs[0, 0].imshow(rgb_input_np)
     axs[0, 0].set_title('RGB Input')
-    axs[0, 1].imshow(gt_depth, cmap='viridis')
+    axs[0, 1].imshow(gt_depth, cmap='viridis', vmin=0, vmax=10)
     axs[0, 1].set_title('GT Depth')
     if options.orig_flag:
-        axs[0, 2].imshow(pred_depth_list['mono'], cmap='viridis')
+        axs[0, 2].imshow(pred_depth_list['mono'], cmap='viridis', vmin=0, vmax=10)
         axs[0, 2].set_title('Pred Depth - Orig Mono2')
     if options.tuned_flag:
         num_models = 0
         for i in options.tuned_models:
             if num_models > 2:
                 break
-            axs[1, num_models].imshow(pred_depth_list['tuned_%d' % i], cmap='viridis')
+            axs[1, num_models].imshow(pred_depth_list['tuned_%d' % i], cmap='viridis', vmin=0, vmax=10)
             axs[1, num_models].set_title('Tuned for %d epochs' % (i + 1))
             num_models += 1
     plt.show()
@@ -307,4 +313,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    print("Testing")
